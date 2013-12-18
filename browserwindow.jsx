@@ -1,19 +1,17 @@
 ﻿#target photoshop
 
-var constants = {
-    browser: { path: "files/safari.psd"},
-    size: {}
-};
-
-//Getting the folder path of the script
+var browser = { path: "browserwindow.psd" };
+//Getting the folder path of the script.
 var scriptFilePath= $.fileName.substring(0, $.fileName.lastIndexOf("/")) + "/";
 
-// Function to get the element height
+// Function to get the element height based on element.bounds.
 function height(element) { return element.bounds[3] - element.bounds[1]; }
-// Function to get the element width
+// Function to get the element width based on element.bounds.
 function width(element) { return element.bounds[2] - element.bounds[0]; }
 
+// A function for laer style rasterization.
 function raterizeLayerStyle(){
+    // Some magic happens here.
     var idrasterizeLayer = stringIDToTypeID( "rasterizeLayer" );
     var desc5 = new ActionDescriptor();
     var idnull = charIDToTypeID( "null" );
@@ -31,9 +29,12 @@ function raterizeLayerStyle(){
 
     desc5.putEnumerated( idWhat, idrasterizeItem, idlayerStyle );
     executeAction( idrasterizeLayer, desc5, DialogModes.NO );
+    // Magic ends here.
 }
 
+// A function for resizing the layer in pixels.
 function resizeLayer(Width , Height){
+    // Some magic happens here.
     var startRulerUnits = preferences.rulerUnits;
     preferences.rulerUnits = Units.PIXELS;
     var LB = activeDocument.activeLayer.bounds;
@@ -45,20 +46,22 @@ function resizeLayer(Width , Height){
     var NewHeight = lHeight * Height;
     activeDocument.activeLayer.resize(Number(NewWidth),Number(NewHeight),AnchorPosition.MIDDLECENTER); 
     app.preferences.rulerUnits = startRulerUnits;
+    // Magic ends here.
 }
 
-function browserWindow(){
-    // Defining the application documents
+function browserwindow(){
+    // Defining the application documents.
     preferences.rulerUnits = Units.PIXELS;
+    // A document must be opened in Photoshop.
     var sourceDoc = app.activeDocument;
-    var targetDoc = app.documents.add(sourceDoc.width, sourceDoc.height, 72, "browserWindow", NewDocumentMode.RGB, DocumentFill.TRANSPARENT);
-    var browserDoc = app.open(File(scriptFilePath + constants.browser.path));
+    var targetDoc = app.documents.add(sourceDoc.width, sourceDoc.height, 72, "browserwindow", NewDocumentMode.RGB, DocumentFill.TRANSPARENT);
+    var browserDoc = app.open(File(scriptFilePath + browser.path));
     
     // Merging all the layers in the source document.
-    // Copying the merged layer to the newly created document.
     app.activeDocument = sourceDoc;
     app.activeDocument.artLayers.add();
     app.activeDocument.mergeVisibleLayers();
+    // Selecting and copying the merged layer to the newly created document.
     var sourceImage = app.activeDocument.layers[0];
     sourceImage.name = "sourceImage";
     sourceImage = sourceImage.duplicate(targetDoc);
@@ -72,67 +75,71 @@ function browserWindow(){
 
     // Copying the layer group from the browser document to the new target document.
     app.activeDocument = browserDoc;
-    var browserWindow = app.activeDocument.layerSets.getByName("browserWindow");
-    app.activeDocument.activeLayer = browserWindow;
-    var browserWindow = browserWindow.duplicate(targetDoc);
+    var browserwindow = app.activeDocument.layerSets.getByName("browserwindow");
+    app.activeDocument.activeLayer = browserwindow;
+    var browserwindow = browserwindow.duplicate(targetDoc);
 
     // Selecting and defining all the copied layers in the target document.
     app.activeDocument = targetDoc;
-    browserWindow = app.activeDocument.layerSets.getByName("browserWindow");
-    var browserTopLeft = browserWindow.layers.getByName("topLeft");
-    var browserTopCenter = browserWindow.layers.getByName("topCenter");
-    var browserTopRight = browserWindow.layers.getByName("topRight");
-    var browserBottomLeft = browserWindow.layers.getByName("bottomLeft");
-    var browserBottomCenter = browserWindow.layers.getByName("bottomCenter");
-    var browserBottomRight = browserWindow.layers.getByName("bottomRight");
-    var browserLeftSide = browserWindow.layers.getByName("leftSide");
-    var browserRightSide = browserWindow.layers.getByName("rightSide");
+    browserwindow = app.activeDocument.layerSets.getByName("browserwindow");
+    var browserTopLeft = browserwindow.layers.getByName("topLeft");
+    var browserTopCenter = browserwindow.layers.getByName("topCenter");
+    var browserTopRight = browserwindow.layers.getByName("topRight");
+    var browserBottomLeft = browserwindow.layers.getByName("bottomLeft");
+    var browserBottomCenter = browserwindow.layers.getByName("bottomCenter");
+    var browserBottomRight = browserwindow.layers.getByName("bottomRight");
+    var browserLeftSide = browserwindow.layers.getByName("leftSide");
+    var browserRightSide = browserwindow.layers.getByName("rightSide");
 
-    // Unfortunately, rasterizing all the layers in browserWindow group.
+    // Unfortunately, rasterizing all the layers in browserwindow group.
     // This is used, because vector layers could not be properly positioned.
     // I hope to find some workaround in the near future. I really hope.
-    for (var i = 0; i < browserWindow.layers.length; i++) {
-        targetDoc.activeLayer = browserWindow.layers[i];
+    for (var i = 0; i < browserwindow.layers.length; i++) {
+        targetDoc.activeLayer = browserwindow.layers[i];
         raterizeLayerStyle();
     }
 
-    // Changing the document canvas size according to the layer sizes
+    // Changing the document canvas size according to the layer sizes.
     targetDoc.resizeCanvas(targetDoc.width, targetDoc.height + height(browserTopLeft), AnchorPosition.BOTTOMCENTER);
     targetDoc.resizeCanvas(targetDoc.width, targetDoc.height + height(browserBottomLeft), AnchorPosition.TOPCENTER);
     targetDoc.resizeCanvas(targetDoc.width + width(browserRightSide), targetDoc.height, AnchorPosition.MIDDLELEFT);
     targetDoc.resizeCanvas(targetDoc.width + width(browserLeftSide), targetDoc.height, AnchorPosition.MIDDLERIGHT);
     
-    // Scaling the elements
-    // Top and bottom middle sections
+    // Scaling the elements.
+    // Top and bottom middle sections.
     targetDoc.activeLayer = browserTopCenter;
     resizeLayer(targetDoc.width - width(browserTopLeft) - width(browserTopRight), height(browserTopCenter));
     targetDoc.activeLayer = browserBottomCenter; 
     resizeLayer(targetDoc.width - width(browserBottomLeft) - width(browserBottomRight), height(browserBottomCenter));
-    // Left and right sides
+    // Left and right sides.
     targetDoc.activeLayer = browserLeftSide;
     resizeLayer(width(browserLeftSide), targetDoc.height - height(browserTopLeft) - height(browserBottomLeft));
     targetDoc.activeLayer = browserRightSide;
     resizeLayer(width(browserRightSide), targetDoc.height - height(browserTopRight) - height(browserBottomRight));
     
-    // Moving all the layers to the right positions
-    // Top Sections
+    // Moving all the layers to the right positions.
+    // Top Sections.
     browserTopLeft.translate(- browserTopLeft.bounds[0], - browserTopLeft.bounds[1]);
     browserTopCenter.translate(- browserTopCenter.bounds[0] + width(browserTopLeft), - browserTopCenter.bounds[1]);
     browserTopRight.translate( targetDoc.width - width(browserTopRight) - browserTopRight.bounds[0], - browserTopRight.bounds[1]);
-    // Bottom Sections
+    // Bottom Sections.
     browserBottomLeft.translate(- browserBottomLeft.bounds[0], targetDoc.height - browserBottomLeft.bounds[1] - height(browserBottomLeft));
     browserBottomCenter.translate(- browserBottomCenter.bounds[0] + width(browserBottomLeft), targetDoc.height - browserBottomCenter.bounds[1] - height(browserBottomCenter));
     browserBottomRight.translate( targetDoc.width - width(browserBottomRight) - browserBottomRight.bounds[0], targetDoc.height - browserBottomRight.bounds[1] - height(browserBottomRight));
-    //Side Sections
+    //Side Sections.
     browserLeftSide.translate(- browserLeftSide.bounds[0], - browserLeftSide.bounds[1] + height(browserTopLeft));
     browserRightSide.translate(targetDoc.width - width(browserRightSide) - browserRightSide.bounds[0], - browserRightSide.bounds[1] + height(browserTopRight));
     
     targetDoc.resizeCanvas(targetDoc.width + 50, targetDoc.height + 50);
 
+    // Closing the opened browserwindow file.
     browserDoc.close();
-    app.activeDocument.activeLayer = browserWindow;
+    // Setting the newly created document as the active one.
+    app.activeDocument.activeLayer = browserwindow;
 }
 
+// Bring Photoshop to front.
 app.bringToFront();
-browserWindow();
+// Run the script. Finally. Yay!
+browserwindow();
 
