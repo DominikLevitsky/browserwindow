@@ -1,6 +1,6 @@
 #browserwindow
 
-browserwindow is a simple Adobe Photoshop script for adding a browser window (or any kind of border) to your designs!
+A simple Adobe Photoshop script for adding a browser window (or any kind of border) to your designs!
 
 ##Installation
 Unzip the contents of the downloaded archive to your Photoshop scripts folder.
