@@ -43,7 +43,7 @@ The is also a short README in the browserwindow.psd, so you don't forget all thi
 + Restart Photoshop, if you don't see the script under File > Scripts
 + The script is currently tested only in Photoshop CS6.
 
-##Future plans
+##Future
 + Remove the layer rasterization. Keep the layers as shapes during the whole process (this can be tricky).
 + Support file selection for different browser styles.
 
