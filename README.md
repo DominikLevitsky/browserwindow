@@ -13,7 +13,9 @@ and for 64-bit systems at
     C:/Program Files/Adobe/Adobe Photoshop CS6 (64 Bit)/Presets/Scripts
 
 ##Usage
-Open the document, where you want to apply the browser window. Run the script by clicking **File > Scripts > browserwindow**
+Open the document, where you want to apply the browser window. 
+
+Run the script by clicking **File > Scripts > browserwindow**
 
 **IMPORTANT! The script will merge all the layers in the opened document!**
 
