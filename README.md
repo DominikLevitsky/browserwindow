@@ -4,6 +4,7 @@
 
 ##Installation
 Unzip the contents of the downloaded archive to your Photoshop scripts folder.
+
 For Windows the default path for it is at
 
     C:/Program Files (x86)/Adobe/Adobe Photoshop CS6/Presets/Scripts
