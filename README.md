@@ -32,6 +32,8 @@ You can customize the browserwindow.psd as you like, just remember:
 
 Because this will break the script.
 
+![Alt text](http://dominik-levitsky.com/files/browserwindow/layers-and-stuff.217.original.png)
+
 Though, you can change the layers as you want. You can resize them or add styles to them. You can create all your own layers of any size or form inside the group, just remember to keep the naming of them. You don't need to rasterize the layers, browserwindow will rasterize them anyways during the process. You can even change the order of the layers inside the group, just don't put them inside other groups, or outside the browserwindow group.
 
 The is also a short README in the browserwindow.psd, so you don't forget all this stuff.
