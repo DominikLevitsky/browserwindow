@@ -20,6 +20,8 @@ Run the script by clicking **File > Scripts > browserwindow**
 
 **IMPORTANT! The script will merge all the layers in the opened document!**
 
+![Alt text](http://dominik-levitsky.com/files/browserwindow/browserwindow.230.original.png)
+
 ##Customization
 The browserwindow script is made to be customizable. Feel free to do anything you want with it. The browserwindow.psd is included just for demonstration purposes. The script doesn't just apply that browse window, you can make it to apply an iPhone, iPad, whatever.
 
