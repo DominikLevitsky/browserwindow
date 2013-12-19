@@ -13,6 +13,8 @@ and for 64-bit systems at
 
     C:/Program Files/Adobe/Adobe Photoshop CS6 (64 Bit)/Presets/Scripts
 
+![Alt text](http://dominik-levitsky.com/files/browserwindow/browserwindow-installation.220.original.png)
+
 ##Usage
 Open the document, where you want to apply the browser window. 
 
